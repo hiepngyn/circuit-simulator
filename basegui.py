@@ -90,16 +90,14 @@ class DragDropToolbar:
                         break 
 
             clicked_item = self.canvas.find_closest(event.x, event.y)
-            # Assuming you have stored your wire and power source objects in a dictionary for reference
             for obj, (x, y) in self.gate_objects.items():
                 if isinstance(obj, Wire):
-                    if clicked_item == obj.start_button:  # If you clicked the wire's start button
+                    if clicked_item == obj.start_button:  
                         obj.select()
                     elif self.selected_wire and clicked_item == obj.end_button:
                         obj.deselect()
-                        # Connection logic for end of wire goes here
                 elif isinstance(obj, Power_Source):
-                    if self.selected_wire:  # If a wire is selected and you click on a power source
+                    if self.selected_wire: 
                         obj.connect_wire(self.selected_wire)
                         self.selected_wire = None
 
