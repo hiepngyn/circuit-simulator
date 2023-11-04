@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter
 from andgate import AND_gate
 from orgate import OR_gate
 from notgate import NOT_gate
@@ -6,6 +7,7 @@ from nandgate import NAND_gate
 from norgate import NOR_gate
 from xorgate import XOR_gate
 from powersource import Power_Source
+from output import Output_Control
 from wire import Wire
 
 class DragDropToolbar:
@@ -16,7 +18,7 @@ class DragDropToolbar:
         self.canvas = tk.Canvas(root, width=600, height=400)
         self.canvas.pack(expand=True, fill='both')
         
-        self.toolbar = tk.Frame(root, bg='grey')
+        self.toolbar = customtkinter.CTkFrame(root, border_color='grey')
         self.toolbar.pack(side='bottom', fill='x')
         
         self.add_gate_button('AND', self.toolbar)
@@ -27,7 +29,7 @@ class DragDropToolbar:
         self.add_gate_button('XOR', self.toolbar)
         self.add_gate_button('Power', self.toolbar)
         self.add_gate_button('Wire', self.toolbar)
-
+        self.add_gate_button('Output', self.toolbar)
 
         
         self.selected_gate = None
@@ -38,12 +40,15 @@ class DragDropToolbar:
         power_source.connect_wire(wire)
 
     def add_gate_button(self, gate_type, parent):
-        button = tk.Button(parent, text=gate_type, command=lambda: self.select_gate(gate_type))
+        button = customtkinter.CTkButton(parent, text=gate_type, command=lambda: self.select_gate(gate_type))
         button.pack(side='left', padx=2, pady=2)
 
     def select_gate(self, gate_type):
         self.selected_gate = gate_type
         print(f'Selected {gate_type} gate')
+
+    
+
 
     def on_canvas_click(self, event):
         if self.selected_gate:
@@ -83,7 +88,12 @@ class DragDropToolbar:
                 power_source.draw(self.canvas, x, y)
                 self.gate_objects[power_source] = (x, y)
                 self.selected_gate = None
-            if self.selected_gate == "Wire":
+            elif self.selected_gate == 'Output':
+                output_control = Output_Control()
+                output_control.draw(self.canvas,x,y)
+                self.gate_objects[output_control] = (x,y)
+                self.selected_gate = None
+            elif self.selected_gate == "Wire":
                 new_wire = Wire(self.canvas, None, None, (event.x, event.y), None)
                 new_wire.draw(event.x, event.y)
                 self.selected_wire = new_wire 
@@ -96,7 +106,6 @@ class DragDropToolbar:
                         self.selected_wire = None
                         break 
             
-                    
             clicked_item = self.canvas.find_closest(event.x, event.y)
             for obj, (x, y) in self.gate_objects.items():
                 if isinstance(obj, Wire):
@@ -127,8 +136,11 @@ class DragDropToolbar:
                 break  
         
 
-root = tk.Tk()
+root = customtkinter.CTk()
 app = DragDropToolbar(root)
+
+customtkinter.set_appearance_mode("light")  # Modes: system (default), light, dark
+customtkinter.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
 app.canvas.bind('<Button-1>', app.on_canvas_click)
 
