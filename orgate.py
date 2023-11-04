@@ -6,7 +6,7 @@ def class OR_gate:
     output = True
 
  def set_output(self):
-        output = !input
+        self.output = (self.top_Input or self.bottom_Input)
     
 
     def set_TopInput(self, input_Val):
@@ -19,5 +19,5 @@ def class OR_gate:
     
 
     def get_output(self):
-        return (top_Input or bottom_Input)
+        return self.output
 
