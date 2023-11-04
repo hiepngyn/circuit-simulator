@@ -1,0 +1,1 @@
+# NOT Gate File
