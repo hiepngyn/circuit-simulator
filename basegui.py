@@ -5,7 +5,7 @@ from notgate import NOT_gate
 from nandgate import NAND_gate
 from norgate import NOR_gate
 from xorgate import XOR_gate
-
+from powersource import Power_gate
 
 class DragDropToolbar:
     def __init__(self, root):
@@ -24,6 +24,8 @@ class DragDropToolbar:
         self.add_gate_button('NAND', self.toolbar)
         self.add_gate_button('NOR', self.toolbar)
         self.add_gate_button('XOR', self.toolbar)
+        self.add_gate_button('Power', self.toolbar)
+
 
         
         self.selected_gate = None
@@ -65,7 +67,12 @@ class DragDropToolbar:
                 gate = XOR_gate()
                 items = gate.draw(self.canvas,x,y)
                 items_id=items[0]
+            elif self.selected_gate == 'Power':
+                gate = Power_gate()
+                items = gate.draw(self.canvas,x,y)
+                items_id=items[0]
             self.selected_gate = None 
+        
 
 root = tk.Tk()
 app = DragDropToolbar(root)
