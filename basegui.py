@@ -2,6 +2,10 @@ import tkinter as tk
 from andgate import AND_gate
 from orgate import OR_gate
 from notgate import NOT_gate
+from nandgate import NAND_gate
+from norgate import NOR_gate
+from xorgate import XOR_gate
+
 
 class DragDropToolbar:
     def __init__(self, root):
@@ -17,6 +21,10 @@ class DragDropToolbar:
         self.add_gate_button('AND', self.toolbar)
         self.add_gate_button('OR', self.toolbar)
         self.add_gate_button('NOT', self.toolbar)
+        self.add_gate_button('NAND', self.toolbar)
+        self.add_gate_button('NOR', self.toolbar)
+        self.add_gate_button('XOR', self.toolbar)
+
         
         self.selected_gate = None
 
@@ -43,6 +51,18 @@ class DragDropToolbar:
                 items_id = items[0]
             elif self.selected_gate == 'NOT':
                 gate = NOT_gate()
+                items = gate.draw(self.canvas,x,y)
+                items_id=items[0]
+            elif self.selected_gate == 'NAND':
+                gate = NAND_gate()
+                items = gate.draw(self.canvas,x,y)
+                items_id=items[0]
+            elif self.selected_gate == 'NOR':
+                gate = NOR_gate()
+                items = gate.draw(self.canvas,x,y)
+                items_id=items[0]
+            elif self.selected_gate == 'XOR':
+                gate = XOR_gate()
                 items = gate.draw(self.canvas,x,y)
                 items_id=items[0]
             self.selected_gate = None 
