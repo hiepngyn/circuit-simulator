@@ -1,5 +1,7 @@
 import tkinter as tk
 from andgate import AND_gate
+from orgate import OR_gate
+from notgate import NOT_gate
 
 class DragDropToolbar:
     def __init__(self, root):
@@ -35,6 +37,14 @@ class DragDropToolbar:
                 gate = AND_gate() 
                 items = gate.draw(self.canvas, x, y)
                 item_id = items[0] 
+            elif self.selected_gate == 'OR':
+                gate = OR_gate()
+                items = gate.draw(self.canvas,x,y)
+                items_id = items[0]
+            elif self.selected_gate == 'NOT':
+                gate = NOT_gate()
+                items = gate.draw(self.canvas,x,y)
+                items_id=items[0]
             self.selected_gate = None 
 
 root = tk.Tk()

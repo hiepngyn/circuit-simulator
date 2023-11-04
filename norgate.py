@@ -1,8 +1,8 @@
 # NOR Gate File
-class OR_gate:
-    top_Input = True
-    bottom_Input = True
-    output = True
+class NOR_gate:
+    top_Input = False
+    bottom_Input = False
+    output = False
 
     def set_output(self):
         self.output = not (self.top_Input or self.bottom_Input)

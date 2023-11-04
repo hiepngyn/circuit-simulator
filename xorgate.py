@@ -12,10 +12,10 @@ class XOR_gate:
         self.bottom_Input = in_Val
 
     def set_output(self):
-        if((self.top_input == True) or (self.bottom_Input == True)):
+        if(self.top_input == self.bottom_input):
             self.output = False
         else:
-            self.output == True
+            self.output = True
     
     def get_output(self):
         return self.output

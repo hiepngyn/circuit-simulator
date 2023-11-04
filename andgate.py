@@ -15,7 +15,7 @@ class AND_gate:
         if((self.top_Input == True) and (self.bottom_Input == True)):
             self.output = True
         else:
-            self.output == False
+            self.output = False
     
     def get_output(self):
         return self.output

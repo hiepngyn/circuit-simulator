@@ -15,7 +15,7 @@ class NAND_gate:
         if((self.top_input == True) or (self.bottom_Input == True)):
             self.output = False
         else:
-            self.output == True
+            self.output = True
     
     def get_output(self):
         return self.output
