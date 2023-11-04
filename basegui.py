@@ -5,7 +5,8 @@ from notgate import NOT_gate
 from nandgate import NAND_gate
 from norgate import NOR_gate
 from xorgate import XOR_gate
-from powersource import Power_gate
+from powersource import Power_Source
+from wire import Wire
 
 class DragDropToolbar:
     def __init__(self, root):
@@ -25,12 +26,16 @@ class DragDropToolbar:
         self.add_gate_button('NOR', self.toolbar)
         self.add_gate_button('XOR', self.toolbar)
         self.add_gate_button('Power', self.toolbar)
+        self.add_gate_button('Wire', self.toolbar)
 
 
         
         self.selected_gate = None
-
+        self.selected_wire = None 
         self.gate_objects = {}
+
+    def connect_wire_to_power(self, wire, power_source):
+        power_source.connect_wire(wire)
 
     def add_gate_button(self, gate_type, parent):
         button = tk.Button(parent, text=gate_type, command=lambda: self.select_gate(gate_type))
@@ -68,10 +73,51 @@ class DragDropToolbar:
                 items = gate.draw(self.canvas,x,y)
                 items_id=items[0]
             elif self.selected_gate == 'Power':
-                gate = Power_gate()
-                items = gate.draw(self.canvas,x,y)
-                items_id=items[0]
-            self.selected_gate = None 
+                power_source = Power_Source()
+                power_source.draw(self.canvas, x, y)
+                self.gate_objects[power_source] = (x, y)
+            if self.selected_gate == "Wire":
+                new_wire = Wire(self.canvas, None, None, (event.x, event.y), None)
+                new_wire.draw(event.x, event.y)
+                self.selected_wire = new_wire 
+                self.selected_gate = None
+            elif self.selected_wire is not None:
+                clicked_object = self.canvas.find_withtag("current")
+                for obj, (x, y) in self.gate_objects.items():
+                    if hasattr(obj, 'button_id') and obj.button_id == clicked_object[0]:
+                        self.connect_wire_to_power(self.selected_wire, obj)
+                        self.selected_wire = None
+                        break 
+
+            clicked_item = self.canvas.find_closest(event.x, event.y)
+            # Assuming you have stored your wire and power source objects in a dictionary for reference
+            for obj, (x, y) in self.gate_objects.items():
+                if isinstance(obj, Wire):
+                    if clicked_item == obj.start_button:  # If you clicked the wire's start button
+                        obj.select()
+                    elif self.selected_wire and clicked_item == obj.end_button:
+                        obj.deselect()
+                        # Connection logic for end of wire goes here
+                elif isinstance(obj, Power_Source):
+                    if self.selected_wire:  # If a wire is selected and you click on a power source
+                        obj.connect_wire(self.selected_wire)
+                        self.selected_wire = None
+
+    def select_wire(self, wire):
+        if self.selected_wire == wire:
+            wire.deselect()
+            self.selected_wire = None
+        else:
+            if self.selected_wire is not None:
+                self.selected_wire.deselect()
+            self.selected_wire = wire
+            wire.select()
+    
+    def on_power_source_click(self, power_source):
+        for wire in self.wire_objects:  
+            if wire.selected:
+                power_source.connect_wire(wire)
+                break  
         
 
 root = tk.Tk()
