@@ -1,15 +1,15 @@
 # NOT Gate File
 
-class NOT_gate::
+class NOT_gate:
     input = True
     output= False
 
     def set_output(self):
-        output = !input
+        self.output = not input
     
 
     def set_input(self, inputVal):
-        input = inputVal
+        self.input = inputVal
 
 
     def get_output(self):
