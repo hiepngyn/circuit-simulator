@@ -19,3 +19,8 @@ class AND_gate:
     
     def get_output(self):
         return self.output
+    
+    @staticmethod
+    def draw(canvas, x, y):
+        return canvas.create_rectangle(x-20, y-20, x+20, y+20, fill='white'), \
+                canvas.create_text(x, y, text='AND')
