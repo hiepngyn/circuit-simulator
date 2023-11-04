@@ -48,18 +48,22 @@ class DragDropToolbar:
     def on_canvas_click(self, event):
         if self.selected_gate:
             x, y = event.x, event.y
+            gate = None
             if self.selected_gate == 'AND':
                 gate = AND_gate() 
                 items = gate.draw(self.canvas, x, y)
                 item_id = items[0] 
+                self.selected_gate = None
             elif self.selected_gate == 'OR':
                 gate = OR_gate()
                 items = gate.draw(self.canvas,x,y)
                 items_id = items[0]
+                self.selected_gate = None
             elif self.selected_gate == 'NOT':
                 gate = NOT_gate()
                 items = gate.draw(self.canvas,x,y)
                 items_id=items[0]
+                self.selected_gate = None
             elif self.selected_gate == 'NAND':
                 gate = NAND_gate()
                 items = gate.draw(self.canvas,x,y)
@@ -68,14 +72,17 @@ class DragDropToolbar:
                 gate = NOR_gate()
                 items = gate.draw(self.canvas,x,y)
                 items_id=items[0]
+                self.selected_gate = None
             elif self.selected_gate == 'XOR':
                 gate = XOR_gate()
                 items = gate.draw(self.canvas,x,y)
                 items_id=items[0]
+                self.selected_gate = None
             elif self.selected_gate == 'Power':
                 power_source = Power_Source()
                 power_source.draw(self.canvas, x, y)
                 self.gate_objects[power_source] = (x, y)
+                self.selected_gate = None
             if self.selected_gate == "Wire":
                 new_wire = Wire(self.canvas, None, None, (event.x, event.y), None)
                 new_wire.draw(event.x, event.y)
@@ -88,7 +95,8 @@ class DragDropToolbar:
                         self.connect_wire_to_power(self.selected_wire, obj)
                         self.selected_wire = None
                         break 
-
+            
+                    
             clicked_item = self.canvas.find_closest(event.x, event.y)
             for obj, (x, y) in self.gate_objects.items():
                 if isinstance(obj, Wire):
@@ -99,7 +107,8 @@ class DragDropToolbar:
                 elif isinstance(obj, Power_Source):
                     if self.selected_wire: 
                         obj.connect_wire(self.selected_wire)
-                        self.selected_wire = None
+            self.selected_wire = None
+
 
     def select_wire(self, wire):
         if self.selected_wire == wire:
